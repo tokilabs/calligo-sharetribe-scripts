@@ -33,9 +33,9 @@ describe('getTemplateInstallPackage', () => {
   });
 
   it('typescript@next gives cra-template-typescript@next', async () => {
-    await expect(
-      getTemplateInstallPackage('cra-template-typescript@next')
-    ).resolves.toBe('cra-template-typescript@next');
+    await expect(getTemplateInstallPackage('typescript@next')).resolves.toBe(
+      'cra-template-typescript@next'
+    );
   });
 
   it('cra-template@next gives cra-template@next', async () => {
