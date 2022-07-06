@@ -69,7 +69,7 @@ function printHostingInstructions(
   console.log();
   console.log(
     `  ${chalk.yellow(
-      'https://www.sharetribe.com/docs/ftw-hosting/how-to-deploy-ftw-to-production/'
+      'https://www.sharetribe.com/docs/ftw/how-to-deploy-ftw-to-production/'
     )}`
   );
   console.log();

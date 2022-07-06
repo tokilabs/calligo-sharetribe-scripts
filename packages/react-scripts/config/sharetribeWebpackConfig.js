@@ -8,24 +8,37 @@ const paths = require('./paths');
 
 // PostCSS plugins:
 // - postcss-import, postcss-apply are our additions
+//   - postcss-apply was deprecated, it didn't work with PostCSS v8: this is customized private plugin
+//   - private plugin can be found from postcss/postcss-apply/ directory
 // - postcss-preset-env: we use nesting and custom-media-queries.
 // - postcss-custom-properties: preserve is turned off due to load it adds to web inspector
 //   in dev environment.
-const postcssPlugins = [
-  require('postcss-import'),
-  require('postcss-apply'),
-  require('postcss-flexbugs-fixes'),
-  require('postcss-preset-env')({
-    autoprefixer: {
-      flexbox: 'no-2009',
+const postcssOptionsPlugins = [
+  'postcss-import',
+  // 'postcss-apply', // doesn't work with PostCSS v8
+  // We temporarily have our own custom version of it as private plugin.
+  // However, CSS Property Sets should be considered deprecated syntax.
+  require.resolve("../postcss/postcss-apply"),
+  'postcss-flexbugs-fixes',
+  [
+    'postcss-preset-env',
+    {
+      autoprefixer: {
+        flexbox: 'no-2009',
+      },
+      features: {
+        "custom-properties": false, //  stage 3, but browser support is good.
+        'nesting-rules': true, // stage 1
+        'custom-media-queries': true, // stage 2
+      },
+      stage: 3,
     },
-    features: {
-      "custom-properties": false,
-      'nesting-rules': true, // stage 0
-      'custom-media-queries': true, // stage 1
-    },
-    stage: 3,
-  }),
+  ],
+  // Sharetribe custom: we don't use postcss-normalize atm.
+  // // Adds PostCSS Normalize as the reset css with default options,
+  // // so that it honors browserslist config in package.json
+  // // which in turn let's users customize the target behavior as per their needs.
+  // 'postcss-normalize',
 ];
 
 // Check that webpack.config has known structure.
@@ -40,11 +53,11 @@ const checkConfigStructure = config => {
   const hasOneOf =
     hasRules &&
     config.module.rules[1].oneOf &&
-    config.module.rules[1].oneOf.length === 9;
+    config.module.rules[1].oneOf.length === 10;
   const hasCssLoader =
     hasOneOf &&
-    config.module.rules[1].oneOf[4].test &&
-    config.module.rules[1].oneOf[4].test.test('file.css');
+    config.module.rules[1].oneOf[5].test &&
+    config.module.rules[1].oneOf[5].test.test('file.css');
   const hasPlugins = !!config.plugins;
   const hasOutput = !!config.output;
   const hasOptimization = !!config.optimization;
@@ -78,6 +91,9 @@ const applySharetribeConfigs = (config, options) => {
     // Set name and target to node as this is running in the server
     newConfig.name = 'node';
     newConfig.target = 'node';
+    // This is a needed addition as defined by
+    // https://github.com/liady/webpack-node-externals
+    newConfig.externalsPresets = { node: true };
 
     // Add custom externals as server doesn't need to bundle everything
     newConfig.externals = [
@@ -96,6 +112,7 @@ const applySharetribeConfigs = (config, options) => {
     newConfig.output.chunkFilename = '[name].[contenthash:8].chunk.js';
 
     // Disable runtimeChunk as it seems to break the server build
+    // NOTE: after CRA v5, runtime chunk seems to be excluded anyway.
     newConfig.optimization.runtimeChunk = undefined;
   }
 
@@ -103,6 +120,6 @@ const applySharetribeConfigs = (config, options) => {
 };
 
 module.exports = {
-  postcssPlugins,
+  postcssOptionsPlugins,
   applySharetribeConfigs,
 };

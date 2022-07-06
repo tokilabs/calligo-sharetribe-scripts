@@ -151,6 +151,7 @@ module.exports = function(webpackEnv, target = 'web') {
             // https://github.com/facebook/create-react-app/issues/2677
             ident: 'postcss',
             config: false,
+            // Sharetribe custom: use our own set of postcss plugins.
             plugins: !useTailwind
               ? sharetribeConfigUtils.postcssOptionsPlugins
               : [
@@ -251,6 +252,14 @@ module.exports = function(webpackEnv, target = 'web') {
       level: 'none',
     },
     optimization: {
+      // Sharetribe custom: create vendor chunk
+      // CRA v5, removed this splitChunks feature, but they are planning to reintroduce it.
+      // https://github.com/facebook/create-react-app/pull/11763
+      splitChunks: isEnvDevelopment
+      ? undefined
+      : {
+          chunks: 'all',
+        },
       minimize: isEnvProduction,
       minimizer: [
         // This is only used in production mode
