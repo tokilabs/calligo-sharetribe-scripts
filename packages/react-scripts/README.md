@@ -21,7 +21,11 @@ which version of `react-scripts` this fork is built from.
 
 - Use [postcss-preset-env](https://github.com/csstools/postcss-preset-env) with live CSS Custom Properties.
 - Use [postcss-import](https://github.com/postcss/postcss-import)
-- Use [postcss-apply](https://github.com/pascalduez/postcss-apply)
+- ~~Use [postcss-apply](https://github.com/pascalduez/postcss-apply)~~
+  - There's naive implementation of PostCSS apply plugin that works on top of PostCSS v8
+  - However, you should consider @apply syntax to be deprecated. We won't support it indefinitely.
+- Use [Loadable components](https://github.com/gregberge/loadable-components)
+  - Use these versions in your client app: "@loadable/component": "^5.15.2", "@loadable/server": "^5.15.2",
 - A separate `build-server` script that makes a build to use in SSR (server side rendering)
 - Show customized instructions how to run the production build bundle
 
@@ -47,6 +51,8 @@ To update the fork to use a new version of the upstream repository:
    git checkout -b update-from-upstream
    git merge <tag_to_be_merged_here_eg_v1.1.2>
    ```
+
+1. update package-lock.json in the root of the create-react-app repository (npm install)
 
 1. Make your changes, test them (see below), make a PR, release
 
