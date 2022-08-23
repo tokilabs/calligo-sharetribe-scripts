@@ -45,25 +45,21 @@ const postcssOptionsPlugins = [
 const checkConfigStructure = config => {
   // First validate the structure of the config to ensure that we mutate
   // the config with the correct assumptions.
-  const hasRules =
-    config &&
-    config.module &&
-    config.module.rules &&
-    config.module.rules.length === 2;
-  const hasOneOf =
+  const hasRules = config?.module?.rules?.length > 0;
+  const foundRuleWithOneOfArray =
     hasRules &&
-    config.module.rules[1].oneOf &&
-    config.module.rules[1].oneOf.length === 10;
+    config.module.rules.find(rule => rule.oneOf?.length === 10);
+
   const hasCssLoader =
-    hasOneOf &&
-    config.module.rules[1].oneOf[5].test &&
-    config.module.rules[1].oneOf[5].test.test('file.css');
+    foundRuleWithOneOfArray &&
+    foundRuleWithOneOfArray.oneOf[5].test &&
+    foundRuleWithOneOfArray.oneOf[5].test.test('file.css');
   const hasPlugins = !!config.plugins;
   const hasOutput = !!config.output;
   const hasOptimization = !!config.optimization;
 
   const configStructureKnown = hasRules
-        && hasOneOf
+        && foundRuleWithOneOfArray
         && hasCssLoader
         && hasPlugins
         && hasOutput
