@@ -60,6 +60,35 @@ To update the fork to use a new version of the upstream repository:
 
 To test your local changes, use [Verdaccio](https://verdaccio.org/en/) or link the local repository to the application:
 
+#### Verdaccio
+
+1. Run Verdaccio locally (http://localhost:4873/) and create user there
+
+1. Make changes to this repo and update version in the package.json of this react-scripts dir
+   The version could be something like "6.0.0-alpha"
+
+1. Publish your changes to the local registry
+
+   ```
+   npm publish --registry http://localhost:4873/
+   ```
+
+1. Go to FTW repo and add .yarnrc file with content:
+
+   ```
+   registry "http://localhost:4873"
+   ```
+
+1. Modify FTW template's package.json
+
+   ```
+   "sharetribe-scripts": "6.0.0-alpha",
+   ```
+
+   Then run `yarn install`
+
+#### Linking
+
 1. In the `create-react-app/packages/react-scripts` directory, install
    dependencies and make a link of the package:
 
