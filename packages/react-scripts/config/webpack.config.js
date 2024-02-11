@@ -103,7 +103,7 @@ const hasJsxRuntime = (() => {
 // It is focused on developer experience, fast rebuilds, and a minimal bundle.
 // Sharetribe custom: add target parameter to change config between
 // web and node.
-module.exports = function(webpackEnv, target = 'web') {
+module.exports = function (webpackEnv, target = 'web') {
   const isEnvDevelopment = webpackEnv === 'development';
   const isEnvProduction = webpackEnv === 'production';
 
@@ -451,7 +451,6 @@ module.exports = function(webpackEnv, target = 'web') {
                 ),
                 // @remove-on-eject-end
                 plugins: [
-
                   // Sharetribe custom: add loadable babel plugin for
                   // application files
                   isTargetNode && require.resolve('@loadable/babel-plugin'),
@@ -589,6 +588,10 @@ module.exports = function(webpackEnv, target = 'web') {
                 },
                 'sass-loader'
               ),
+            },
+            {
+              test: /\.html?$/,
+              loader: require.resolve('html-loader'),
             },
             // "file" loader makes sure those assets get served by WebpackDevServer.
             // When you `import` an asset, you get its (virtual) filename.

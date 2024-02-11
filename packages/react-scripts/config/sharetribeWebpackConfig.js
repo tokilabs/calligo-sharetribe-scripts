@@ -18,7 +18,7 @@ const postcssOptionsPlugins = [
   // 'postcss-apply', // doesn't work with PostCSS v8
   // We temporarily have our own custom version of it as private plugin.
   // However, CSS Property Sets should be considered deprecated syntax.
-  require.resolve("../postcss/postcss-apply"),
+  require.resolve('../postcss/postcss-apply'),
   'postcss-flexbugs-fixes',
   [
     'postcss-preset-env',
@@ -27,7 +27,7 @@ const postcssOptionsPlugins = [
         flexbox: 'no-2009',
       },
       features: {
-        "custom-properties": false, //  stage 3, but browser support is good.
+        'custom-properties': false, //  stage 3, but browser support is good.
         'nesting-rules': true, // stage 1
         'custom-media-queries': true, // stage 2
       },
@@ -47,8 +47,7 @@ const checkConfigStructure = config => {
   // the config with the correct assumptions.
   const hasRules = config?.module?.rules?.length > 0;
   const foundRuleWithOneOfArray =
-    hasRules &&
-    config.module.rules.find(rule => rule.oneOf?.length === 10);
+    hasRules && config.module.rules.find(rule => rule.oneOf?.length === 11);
 
   const hasCssLoader =
     foundRuleWithOneOfArray &&
@@ -58,12 +57,13 @@ const checkConfigStructure = config => {
   const hasOutput = !!config.output;
   const hasOptimization = !!config.optimization;
 
-  const configStructureKnown = hasRules
-        && foundRuleWithOneOfArray
-        && hasCssLoader
-        && hasPlugins
-        && hasOutput
-        && hasOptimization;
+  const configStructureKnown =
+    hasRules &&
+    foundRuleWithOneOfArray &&
+    hasCssLoader &&
+    hasPlugins &&
+    hasOutput &&
+    hasOptimization;
 
   if (!configStructureKnown) {
     throw new Error(

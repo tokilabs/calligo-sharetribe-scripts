@@ -1,0 +1,8 @@
+packages:
+  - packages/**
+  - docusaurus/website
+  - '!**/test/**'
+link-workspace-packages: false
+prefer-workspace-packages: true
+shared-workspace-lockfile: true
+save-workspace-protocol: true
